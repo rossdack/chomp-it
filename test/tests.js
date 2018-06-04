@@ -1,19 +1,35 @@
 let assert = require('assert');
-const UrlTools = require('../src/UrlTools');
+const UrlTools = require('../src/server/UrlTools');
 
 
-describe('URL tests', function() {
+describe('URL tests', function () {
 
-    const inputId = '123456';
+    const inputIdA = 123456;
+    const shortenedValueA = 'eCc';
+
+    const inputIdB = '0123456';
+
     const utlInput = 'http://www.abc.net.au/';
-    const shortenedValue = 'eCc';
 
-    it('encode equals expected', function () {
-        assert.equal(UrlTools.encode(inputId), shortenedValue, 'Expect encoded input to match')
+    it('correctly encodes expected', function () {
+        assert.strictEqual(UrlTools.encode(inputIdA), shortenedValueA, 'Expect encoded input to match ' + shortenedValueA)
     });
 
-    it('decode equals expected', function () {
-        assert.equal(UrlTools.decode(shortenedValue), inputId, 'Expect decoded input to match')
+    it('correctly decodes expected', function () {
+        assert.strictEqual(UrlTools.decode(shortenedValueA), inputIdA, 'Expect decoded input to match ' + inputIdA)
     });
+
+    it('correctly encodes expected', function () {
+        assert.strictEqual(UrlTools.encode(inputIdB), shortenedValueA, 'Expect encoded input to match ' + shortenedValueA)
+    });
+
+    it('correctly decode expected', function () {
+        assert.notStrictEqual(UrlTools.decode(shortenedValueA), inputIdB, 'Expect decoded input not to match ' + inputIdA)
+    });
+
+    it('decodes value as a number', function () {
+        assert.strictEqual(typeof UrlTools.decode(shortenedValueA), "number", 'Expect type to match')
+    });
+
 
 });

@@ -15,7 +15,7 @@ var urlSchema = new mongoose.Schema({
 });
 
 urlSchema.pre('save', function(next) {
-    console.log('running pre-save');
+    console.log('[DBSupport] Running pre-save');
     var doc = this;
     Counter.findByIdAndUpdate({ _id: 'url_count' }, { $inc: { count: 1 } }, function(err, counter) {
         if(err) return next(err);
@@ -33,16 +33,16 @@ promise = mongoose.connect(connectionString, {
 });
 
 promise.then(function(db) {
-    console.log('connected!');
+    console.log('[DBSupport] Connected!');
     URL.remove({}, function() {
-        console.log('URL collection removed');
+        console.log('[DBSupport] URL collection removed');
     })
     Counter.remove({}, function() {
-        console.log('Counter collection removed');
+        console.log('[DBSupport] Counter collection removed');
         var counter = new Counter({_id: 'url_count', count: 10000});
         counter.save(function(err) {
             if(err) return console.error(err);
-            console.log('counter inserted');
+            console.log('[DBSupport] Counter inserted');
         });
     });
 });
@@ -57,38 +57,18 @@ class DBSupport {
                 callback({status: 404})
             }
         });
-
-
-
-        // URL.findOne({_id: id}, function (err, doc) {
-        //         if (doc) {
-        //             // id found, forward to original url
-        //             //response.redirect(301, doc._doc.url);
-        //             return;
-        //         } else {
-        //             // response.send({
-        //             //     status: 404,
-        //             //     statusTxt: 'OK'
-        //             // });
-        //             return;
-        //         }
-        //     });
-
-        //
-        // return new Promise(function (resolve, reject) {
-        //     return URL.findOne(id)
-        // });
     }
 
-
+    /**
+     * Store minified URL in Mongo
+     * @param theUrl
+     * @param callback
+     */
     storeUrl(theUrl, callback) {
-
-        // var query = URL.findOne({url: url});
-        // var promise = query.exec();
 
         URL.findOne({url: theUrl}, function (err, doc) {
             if (doc) {
-                console.log('entry found in db');
+                console.log('[DBSupport] entry found in db');
                 callback({
                     url: theUrl,
                     shortUrl: doc._id,
@@ -96,7 +76,7 @@ class DBSupport {
                     statusTxt: 'OK'
                     });
             } else {
-                console.log('entry NOT found in db, saving new');
+                console.log('[DBSupport] entry NOT found in db, saving new');
                 var url = new URL({
                     url: theUrl
                 });
