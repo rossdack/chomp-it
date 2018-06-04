@@ -9,8 +9,8 @@ var urlTools = require('./UrlTools');
 
 app.use(express.urlencoded({extended: true}));
 
-app.get('/e', (request, response, next) => {
-    response.redirect(301, response.longUrl);
+app.get('/?e', (request, response, next) => {
+    response.redirect(301, '/');
     return;
 });
 
