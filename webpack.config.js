@@ -1,6 +1,8 @@
 const webpack = require('webpack');
+require('dotenv').load();
 var path = require('path');
 
+const PORT = process.env.nodeServerPort || 3000;
 const BUILD_DIR = path.resolve(__dirname, './build');
 const APP_DIR = path.resolve(__dirname, './src/client');
 
@@ -12,11 +14,19 @@ const config = {
     output: {
         filename: 'bundle.js',
         path: BUILD_DIR,
+        publicPath: '/build/'
     },
     module: {
         rules: [
             {
-
+                test: /DataSource.js$/,
+                loader: 'string-replace-loader',
+                options: {
+                    search: '@@SHRINKREST',
+                    replace: 'http://localhost:' + PORT + '/shorten'
+                }
+            },
+            {
                 test: /(\.css|.scss)$/,
                 use: [{
                     loader: "style-loader" // creates style nodes from JS strings
@@ -43,7 +53,7 @@ const config = {
                     loader: "babel-loader",
                     options: {
                         cacheDirectory: false,
-                        presets: ['react', 'babel-preset-es2017'] // Transpiles JSX and ES6
+                        presets: ['react', 'es2015','stage-2'] // Transpiles JSX and ES6
                     }
                 }]
             }

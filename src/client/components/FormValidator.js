@@ -53,8 +53,7 @@ class FormValidator {
             validation[rule.field] = {isInvalid: false, message: ''}
         ));
 
-        //return {isValid: true, ...validation};
-        return Object.assign({isValid: true, validation});
+        return {isValid: true, ...validation};
     }
 }
 

@@ -1,49 +1,36 @@
+require('dotenv').load();
 const express = require('express');
-var mongoose = require('mongoose');
 
 const app = express();
-const port = 8000;
+const port = process.env.nodeServerPort || 3000;
 
 var dbSupport = require('./DBSupport');
 var urlTools = require('./UrlTools');
 
-app.use(express.static(__dirname +'./../../')); //serves the index.html
-
-app.use((request, response, next) => {
-    //console.log(request.headers)
-    next();
-});
-
 app.use(express.urlencoded({extended: true}));
-app.get('/', (request, response) => {
-    //throw new Error('oops')
-    response.send('Hello this a simple express server');
-});
-
-app.get('/decode/:shortUrl', function (request, response, next) {
+app.get(['/:shortUrl', '/decode/:shortUrl', '/decode/:shortUrl/*'], (request, response, next) => {
     console.debug( request.params.shortUrl);
     let shortUrl = request.params.shortUrl;
     let database = new dbSupport();
 
-    database.findById(urlTools.decode(shortUrl), res => {
-        if (res.longUrl) {
-            response.redirect(301, res.longUrl);
-            return;
-        } else {
-            response.send({
-                status: 404,
-                statusTxt: 'OK'
-            });
-            return;
-        }
-    })
+    if (!shortUrl) {
+        next();
+    } else {
 
+        database.findById(urlTools.decode(shortUrl), res => {
+            if (res.longUrl) {
+                response.redirect(301, res.longUrl);
+                return;
+            } else {
+                response.redirect(301, '/?e');
+                return;
+            }
+        })
+    }
 });
 
-app.get('/decode/:shortUrl/*', function (request, response, next) {
-    console.log( request.params.shortUrl);
-    response.send('Hello I got your decode request *');
-});
+// show input page
+app.use(express.static(__dirname +'./../../')); //serves the index.html
 
 app.use(express.json({extended: true}));
 app.use((request, response, next) => {
@@ -81,7 +68,7 @@ app.listen(port, (err) => {
         return console.log('something bad happened', err)
     }
 
-    console.log('server is listening on ' + port);
+    console.log('[Express] server is listening on ' + port);
 });
 
 

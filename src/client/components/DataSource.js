@@ -4,7 +4,8 @@ class DataSource {
 
     shrinkUrl(url) {
         console.log('Shrinking ', url);
-        return axios.post('http://localhost:8000/shorten',
+        // (!)
+        return axios.post('@@SHRINKREST',
             {
                 long_url: url
             });

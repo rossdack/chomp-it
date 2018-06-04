@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "start__react": "react-scripts start",
+    "_start": "nodemon src/server/index.js",
     "start": "nodemon src/server/index.js",
     "build__react": "react-scripts build",
     "test": "mocha",
@@ -15,7 +16,6 @@
     "axios": "^0.18.0",
     "body-parser": "^1.18.3",
     "bootstrap-css-only": "^4.1.0",
-    "btoa": "^1.2.1",
     "debug": "~2.6.9",
     "dotenv": "^5.0.1",
     "express": "~4.16.0",
@@ -28,10 +28,11 @@
     "react-dom": "^16.4.0",
     "react-scripts": "1.1.4",
     "typeface-montserrat": "0.0.54",
-    "validator": "^10.3.0"
+    "validator": "^10.3.0",
+    "webpack": "^4.10.2"
   },
   "devDependencies": {
-    "babel": "^6.23.0",
+    "babel-cli": "^6.23.0",
     "babel-core": "^6.26.3",
     "babel-loader": "^7.1.4",
     "babel-preset-latest": "^6.24.1",
@@ -43,8 +44,8 @@
     "mocha": "^5.2.0",
     "node-sass": "^4.9.0",
     "sass-loader": "^7.0.1",
+    "string-replace-loader": "^2.1.1",
     "style-loader": "^0.21.0",
-    "webpack": "^4.10.2",
     "webpack-cli": "^2.1.4"
   }
 }

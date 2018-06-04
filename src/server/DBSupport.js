@@ -1,5 +1,8 @@
-const connectionString = 'mongodb://localhost:27017';
+require('dotenv').load();
+const connectionString = process.env.mongoConnectionString || 'mongodb://localhost:27017';
 var mongoose = require('mongoose');
+
+// make create/destroy configurable
 
 var countersSchema = new mongoose.Schema({
     _id: { type: String, required: true },
@@ -19,8 +22,8 @@ urlSchema.pre('save', function(next) {
     var doc = this;
     Counter.findByIdAndUpdate({ _id: 'url_count' }, { $inc: { count: 1 } }, function(err, counter) {
         if(err) return next(err);
-        console.log(counter);
-        console.log(counter.count);
+        //console.log(counter);
+        //console.log(counter.count);
         doc._id = counter.count;
         doc.created_at = new Date();
         next();
@@ -36,7 +39,7 @@ promise.then(function(db) {
     console.log('[DBSupport] Connected!');
     URL.remove({}, function() {
         console.log('[DBSupport] URL collection removed');
-    })
+    });
     Counter.remove({}, function() {
         console.log('[DBSupport] Counter collection removed');
         var counter = new Counter({_id: 'url_count', count: 10000});

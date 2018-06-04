@@ -3,34 +3,34 @@ import CopyToClipboard from 'react-copy-to-clipboard';
 
 import DataSource from './DataSource';
 import FormValidator from './FormValidator';
+import Err404 from './Err404';
 
-const decodeHostName = '/decode/';
+import 'typeface-montserrat';
+
+const decodeHostName = window.location.href;
 
 const centEl = {
     marginLeft: 'auto',
-    marginRight: 'auto',
+    marginRight: 'auto'
 };
 
-const divDisplay =
-    //...centEl,
-    Object.assign({
-        centEl,
-        isValid: true,
-        textAlign: 'center',
-        verticalAlign: 'middle',
-        fontFamily: 'Montserrat',
-    });
+const divDisplay = {
+    ...centEl,
+    isValid: true,
+    textAlign: 'center',
+    verticalAlign: 'middle',
+    fontFamily: 'Montserrat'
+};
 
-const shortUrlControl = Object.assign({
-    //...centEl,
-    centEl,
+const shortUrlControl = {
+    ...centEl,
     fontFamily: 'Montserrat',
     border: '1px solid rgb(206, 212, 218)',
     maxWidth: '400px',
     borderRadius: '.25rem',
     display: 'flex',
     marginTop: '20px'
-});
+};
 
 const shortUrlText = {
     padding: '.375rem .75rem',
@@ -40,11 +40,11 @@ const shortUrlText = {
     flexGrow: '2'
 };
 
-const errorBlock = Object.assign({
-    centEl,
+const errorBlock = {
+    ...centEl,
     fontFamily: 'Montserrat',
     color: 'red'
-});
+};
 
 const content = {
     height: '85vh',
@@ -57,12 +57,12 @@ const hasError = {
     border: '1px solid red'
 };
 
-const innerContainer = Object.assign({
-    centEl,
+let innerContainer = {
+    ...centEl,
     marginTop: '20px',
     maxWidth: '400px',
     display: 'flex',
-});
+};
 
 const copiedIndicatorContainer = {
     display: 'inline-block'
@@ -78,7 +78,7 @@ const headerText = {
 };
 
 class App extends Component {
-    constructor() {
+    constructor(props) {
         super();
 
         this.validator = new FormValidator([
@@ -96,7 +96,8 @@ class App extends Component {
             copied: false,
             backendError: false,
             submitted: false,
-            validation: this.validator.valid()
+            validation: this.validator.valid(),
+            notFound: (window.location.search).indexOf('?e') > -1
         };
 
         this.dataSource = new DataSource();
@@ -127,6 +128,18 @@ class App extends Component {
     render() {
         let validation = this.submitted ? this.validator.validate(this.state) : this.state.validation;
 
+        if (this.state.notFound) {
+            return (
+                <div style={divDisplay}>
+                    <div style={headerText}></div>
+                    <div className='form-group text-center'>
+                        <div style={innerContainer}>
+                            <Err404/>
+                        </div>
+                    </div>
+                 </div>);
+        }
+
         return (
             <div style={divDisplay}>
 
@@ -134,13 +147,15 @@ class App extends Component {
                     <div style={headerText}>Shorten your URLs!</div>
                     <div className='form-group text-center'>
                         <div style={innerContainer}>
+
+
                             <input type='url'
                                    name='urlInput'
                                    ref='urlInput'
                                    className={'form-control'}
-                                   placeholder={'Paste a link to shorten in'}
+                                   placeholder={'Paste a link to shorten it'}
                                    disabled={this.state.submitted}
-                                   // style={validation.urlInput.isInvalid ? hasError : null}
+                                   style={validation.urlInput.isInvalid ? hasError : null}
                                    onChange={({target: {value}}) => this.setState({
                                        urlInput: value,
                                        copied: false,
@@ -148,10 +163,10 @@ class App extends Component {
                                    })}/>
                             <button className='btn btn-primary btn-sm' disabled={this.state.submitted} onClick={this.shorten.bind(this)}>Shorten URL
                             </button>
+
                         </div>
                         <div>
-                            {/*{validation.urlInput.message}*/}
-                            <span style={errorBlock}></span>
+                            <span style={errorBlock}>{validation.urlInput.message}</span>
                         </div>
 
                         {(validation.isValid && this.state.shortUrl != null && this.state.urlInput !== '' && (
