@@ -16,19 +16,19 @@ describe('URL tests', function () {
     });
 
     it('correctly encodes expected', function () {
-        assert.strictEqual(UrlTools.encode(10000), 'BKL', 'Expect encoded input to match ' + shortenedValueA)
+        assert.strictEqual(UrlTools.encode(10000), 'BKL', 'Expect encoded input to match BKL')
     });
     it('correctly encodes expected', function () {
-        assert.strictEqual(UrlTools.encode(10001), 'BKw', 'Expect encoded input to match ' + shortenedValueA)
+        assert.strictEqual(UrlTools.encode(10001), 'BKw', 'Expect encoded input to match BKw')
     });
     it('correctly encodes expected', function () {
-        assert.strictEqual(UrlTools.encode(10002), 'BKT', 'Expect encoded input to match ' + shortenedValueA)
+        assert.strictEqual(UrlTools.encode(10002), 'BKT', 'Expect encoded input to match BKT')
     });
     it('correctly encodes expected', function () {
-        assert.strictEqual(UrlTools.encode(10003), 'BKy', 'Expect encoded input to match ' + shortenedValueA)
+        assert.strictEqual(UrlTools.encode(10003), 'BKy', 'Expect encoded input to match BKy')
     });
     it('correctly encodes expected', function () {
-        assert.strictEqual(UrlTools.encode(10004), 'BKX', 'Expect encoded input to match ' + shortenedValueA)
+        assert.strictEqual(UrlTools.encode(10004), 'BKX', 'Expect encoded input to match BKX')
     });
 
     it('correctly decodes expected', function () {
