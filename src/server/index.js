@@ -1,6 +1,6 @@
 require('dotenv').load();
 const express = require('express');
-
+var path = require('path');
 const app = express();
 const port = process.env.nodeServerPort || 3000;
 
@@ -9,14 +9,16 @@ var urlTools = require('./UrlTools');
 
 app.use(express.urlencoded({extended: true}));
 
-app.get('/?e', (request, response, next) => {
-    response.redirect(301, '/');
-    return;
-});
-
 app.get(['/:shortUrl', '/decode/:shortUrl', '/decode/:shortUrl/*'], (request, response, next) => {
-    console.debug( request.params.shortUrl);
+    console.debug( '[ExpressJS decode] '+request.params.shortUrl);
+
     let shortUrl = request.params.shortUrl;
+
+    if (shortUrl.indexOf('?e') > -1) {
+        response.redirect(301, '/');
+        return;
+    }
+
     let database = new dbSupport();
 
     if (!shortUrl) {
@@ -24,11 +26,12 @@ app.get(['/:shortUrl', '/decode/:shortUrl', '/decode/:shortUrl/*'], (request, re
     } else {
 
         database.findById(urlTools.decode(shortUrl), res => {
+            console.log('[ExpressJS decode]' +res);
             if (res.longUrl) {
                 response.redirect(301, res.longUrl);
                 return;
             } else {
-                response.redirect(301, '/?e');
+                response.sendFile(path.join(__dirname + '/error.html'));
                 return;
             }
         })

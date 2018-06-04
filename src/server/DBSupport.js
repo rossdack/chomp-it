@@ -22,8 +22,8 @@ urlSchema.pre('save', function(next) {
     var doc = this;
     Counter.findByIdAndUpdate({ _id: 'url_count' }, { $inc: { count: 1 } }, function(err, counter) {
         if(err) return next(err);
-        //console.log(counter);
-        //console.log(counter.count);
+        console.log(counter);
+        console.log(counter.count);
         doc._id = counter.count;
         doc.created_at = new Date();
         next();
@@ -44,7 +44,7 @@ promise.then(function(db) {
         console.log('[DBSupport] Counter collection removed');
         var counter = new Counter({_id: 'url_count', count: 10000});
         counter.save(function(err) {
-            if(err) return console.error(err);
+            if(err) { return console.error(err); }
             console.log('[DBSupport] Counter inserted');
         });
     });
@@ -71,7 +71,7 @@ class DBSupport {
 
         URL.findOne({url: theUrl}, function (err, doc) {
             if (doc) {
-                console.log('[DBSupport] entry found in db');
+                console.log('[DBSupport] entry found in db: ' + doc._id);
                 callback({
                     url: theUrl,
                     shortUrl: doc._id,
@@ -85,6 +85,7 @@ class DBSupport {
                 });
                 url.save(function (err) {
                     if (err) return console.error(err);
+                    console.log('[DBSupport] adding new entry: ' + url._id + ':' + theUrl);
                     callback({
                         url: theUrl,
                         shortUrl: url._id,

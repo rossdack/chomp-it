@@ -129,17 +129,18 @@ class App extends Component {
     render() {
         let validation = this.submitted ? this.validator.validate(this.state) : this.state.validation;
 
-        if (this.state.notFound) {
-            return (
-                <div style={divDisplay}>
-                    <div style={headerText}></div>
-                    <div className='form-group text-center'>
-                        <div style={innerContainer}>
-                            <Err404/>
-                        </div>
-                    </div>
-                 </div>);
-        }
+         if (this.state.notFound) {
+             console.log('url not found');
+        //     return (
+        //         <div style={divDisplay}>
+        //             <div style={headerText}></div>
+        //             <div className='form-group text-center'>
+        //                 <div style={innerContainer}>
+        //                     <Err404/>
+        //                 </div>
+        //             </div>
+        //          </div>);
+         }
 
         return (
             <div style={divDisplay}>

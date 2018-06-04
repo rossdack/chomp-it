@@ -15,6 +15,22 @@ describe('URL tests', function () {
         assert.strictEqual(UrlTools.encode(inputIdA), shortenedValueA, 'Expect encoded input to match ' + shortenedValueA)
     });
 
+    it('correctly encodes expected', function () {
+        assert.strictEqual(UrlTools.encode(10000), 'BKL', 'Expect encoded input to match ' + shortenedValueA)
+    });
+    it('correctly encodes expected', function () {
+        assert.strictEqual(UrlTools.encode(10001), 'BKw', 'Expect encoded input to match ' + shortenedValueA)
+    });
+    it('correctly encodes expected', function () {
+        assert.strictEqual(UrlTools.encode(10002), 'BKT', 'Expect encoded input to match ' + shortenedValueA)
+    });
+    it('correctly encodes expected', function () {
+        assert.strictEqual(UrlTools.encode(10003), 'BKy', 'Expect encoded input to match ' + shortenedValueA)
+    });
+    it('correctly encodes expected', function () {
+        assert.strictEqual(UrlTools.encode(10004), 'BKX', 'Expect encoded input to match ' + shortenedValueA)
+    });
+
     it('correctly decodes expected', function () {
         assert.strictEqual(UrlTools.decode(shortenedValueA), inputIdA, 'Expect decoded input to match ' + inputIdA)
     });
