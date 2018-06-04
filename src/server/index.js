@@ -8,6 +8,12 @@ var dbSupport = require('./DBSupport');
 var urlTools = require('./UrlTools');
 
 app.use(express.urlencoded({extended: true}));
+
+app.get('/e', (request, response, next) => {
+    response.redirect(301, response.longUrl);
+    return;
+});
+
 app.get(['/:shortUrl', '/decode/:shortUrl', '/decode/:shortUrl/*'], (request, response, next) => {
     console.debug( request.params.shortUrl);
     let shortUrl = request.params.shortUrl;

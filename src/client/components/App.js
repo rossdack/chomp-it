@@ -26,7 +26,8 @@ const shortUrlControl = {
     ...centEl,
     fontFamily: 'Montserrat',
     border: '1px solid rgb(206, 212, 218)',
-    maxWidth: '400px',
+    maxWidth: '500px',
+    width: '400px',
     borderRadius: '.25rem',
     display: 'flex',
     marginTop: '20px'
