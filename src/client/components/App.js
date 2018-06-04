@@ -27,7 +27,7 @@ const shortUrlControl = {
     fontFamily: 'Montserrat',
     border: '1px solid rgb(206, 212, 218)',
     maxWidth: '500px',
-    width: '400px',
+    width: '500px',
     borderRadius: '.25rem',
     display: 'flex',
     marginTop: '20px'
@@ -61,7 +61,7 @@ const hasError = {
 let innerContainer = {
     ...centEl,
     marginTop: '20px',
-    maxWidth: '400px',
+    maxWidth: '500px',
     display: 'flex',
 };
 
