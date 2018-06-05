@@ -2,6 +2,8 @@
 
 Ensure npm is installed (https://www.npmjs.com/), or yarn (https://yarnpkg.com)
 AND mongoDB running on the default port.
+
+Modify the .env in the project root to configure for your environment.
 ```sh
 npm run webpack
 npm install
