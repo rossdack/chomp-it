@@ -103,6 +103,12 @@ class App extends Component {
         this.dataSource = new DataSource();
     }
 
+    _handleKeyPress = (event) => {
+        if (event && event.key === 'Enter') {
+            this.shorten(event);
+        }
+    };
+
     /**
      *
      * @param event
@@ -157,6 +163,7 @@ class App extends Component {
                                    placeholder={'Paste a link to shorten it'}
                                    disabled={this.state.submitted}
                                    style={validation.urlInput.isInvalid ? hasError : null}
+                                   onKeyPress={this._handleKeyPress.bind(this)}
                                    onChange={({target: {value}}) => this.setState({
                                        urlInput: value,
                                        copied: false,

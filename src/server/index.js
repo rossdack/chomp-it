@@ -66,6 +66,10 @@ app.post('/shorten', function (request, response, next) {
     console.log(request.body.long_url);
     var urlData = request.body.long_url;
 
+    if (!urlData.toLowerCase().startsWith('http')) {
+        urlData = 'http://' + urlData;
+    }
+
     let database = new dbSupport();
 
     database.storeUrl(urlData, function (res) {
