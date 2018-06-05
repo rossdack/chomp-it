@@ -3,7 +3,6 @@ import CopyToClipboard from 'react-copy-to-clipboard';
 
 import DataSource from './DataSource';
 import FormValidator from './FormValidator';
-import Err404 from './Err404';
 
 import 'typeface-montserrat';
 

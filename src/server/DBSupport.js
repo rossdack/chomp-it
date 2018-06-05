@@ -5,8 +5,8 @@ var mongoose = require('mongoose');
 // make create/destroy configurable
 
 var countersSchema = new mongoose.Schema({
-    _id: { type: String, required: true },
-    count: { type: Number, default: 0 }
+    _id: {type: String, required: true},
+    count: {type: Number, default: 0}
 });
 
 var Counter = mongoose.model('Counter', countersSchema);
@@ -17,11 +17,11 @@ var urlSchema = new mongoose.Schema({
     created_at: ''
 });
 
-urlSchema.pre('save', function(next) {
+urlSchema.pre('save', function (next) {
     console.log('[DBSupport] Running pre-save');
     var doc = this;
-    Counter.findByIdAndUpdate({ _id: 'url_count' }, { $inc: { count: 1 } }, function(err, counter) {
-        if(err) return next(err);
+    Counter.findByIdAndUpdate({_id: 'url_count'}, {$inc: {count: 1}}, function (err, counter) {
+        if (err) return next(err);
         console.log(counter);
         console.log(counter.count);
         doc._id = counter.count;
@@ -30,21 +30,22 @@ urlSchema.pre('save', function(next) {
     });
 });
 
-var URL = mongoose.model('URL', urlSchema);
+var theURLModel = mongoose.model('URL', urlSchema);
 
-promise = mongoose.connect(connectionString, {
-});
+promise = mongoose.connect(connectionString, {});
 
-promise.then(function(db) {
+promise.then(function (db) {
     console.log('[DBSupport] Connected!');
-    URL.remove({}, function() {
+    theURLModel.remove({}, function () {
         console.log('[DBSupport] URL collection removed');
     });
-    Counter.remove({}, function() {
+    Counter.remove({}, function () {
         console.log('[DBSupport] Counter collection removed');
         var counter = new Counter({_id: 'url_count', count: 10000});
-        counter.save(function(err) {
-            if(err) { return console.error(err); }
+        counter.save(function (err) {
+            if (err) {
+                return console.error(err);
+            }
             console.log('[DBSupport] Counter inserted');
         });
     });
@@ -53,7 +54,7 @@ promise.then(function(db) {
 
 class DBSupport {
     findById(id, callback) {
-        URL.findOne({_id: id}, function (err, doc) {
+        theURLModel.findOne({_id: id}, function (err, doc) {
             if (doc) {
                 callback({status: 301, longUrl: doc._doc.url})
             } else {
@@ -68,8 +69,7 @@ class DBSupport {
      * @param callback
      */
     storeUrl(theUrl, callback) {
-
-        URL.findOne({url: theUrl}, function (err, doc) {
+        theURLModel.findOne({url: theUrl}, function (err, doc) {
             if (doc) {
                 console.log('[DBSupport] entry found in db: ' + doc._id);
                 callback({
@@ -77,14 +77,23 @@ class DBSupport {
                     shortUrl: doc._id,
                     status: 200,
                     statusTxt: 'OK'
-                    });
+                });
             } else {
                 console.log('[DBSupport] entry NOT found in db, saving new');
-                var url = new URL({
+                var url = new theURLModel({
                     url: theUrl
                 });
                 url.save(function (err) {
-                    if (err) return console.error(err);
+                    if (err) {
+                        // problem persisting entry
+                        console.error(err);
+                        callback({
+                            url: theUrl,
+                            shortUrl: url._id,
+                            status: 500,
+                            statusTxt: 'Server internal error'
+                        });
+                    }
                     console.log('[DBSupport] adding new entry: ' + url._id + ':' + theUrl);
                     callback({
                         url: theUrl,

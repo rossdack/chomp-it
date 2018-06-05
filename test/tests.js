@@ -1,15 +1,11 @@
 let assert = require('assert');
 const UrlTools = require('../src/server/UrlTools');
 
-
-describe('URL tests', function () {
+describe('URL coding/decodingtests', function () {
 
     const inputIdA = 123456;
     const shortenedValueA = 'eCc';
-
     const inputIdB = '0123456';
-
-    const utlInput = 'http://www.abc.net.au/';
 
     it('correctly encodes expected', function () {
         assert.strictEqual(UrlTools.encode(inputIdA), shortenedValueA, 'Expect encoded input to match ' + shortenedValueA)

@@ -9,8 +9,18 @@ var urlTools = require('./UrlTools');
 
 app.use(express.urlencoded({extended: true}));
 
+/**
+ * disable client side caching
+ */
+app.use(function (req, res, next) {
+    res.header('Cache-Control', 'private, no-cache, no-store, must-revalidate');
+    res.header('Expires', '-1');
+    res.header('Pragma', 'no-cache');
+    res.header('Surrogate-Control', 'no-store');
+    next()
+});
 app.get(['/:shortUrl', '/decode/:shortUrl', '/decode/:shortUrl/*'], (request, response, next) => {
-    console.debug( '[ExpressJS decode] '+request.params.shortUrl);
+    console.debug('[ExpressJS decode] ', request.params.shortUrl);
 
     let shortUrl = request.params.shortUrl;
 
@@ -26,7 +36,7 @@ app.get(['/:shortUrl', '/decode/:shortUrl', '/decode/:shortUrl/*'], (request, re
     } else {
 
         database.findById(urlTools.decode(shortUrl), res => {
-            console.log('[ExpressJS decode]' +res);
+            console.log('[ExpressJS decode]', res);
             if (res.longUrl) {
                 response.redirect(301, res.longUrl);
                 return;
@@ -39,23 +49,26 @@ app.get(['/:shortUrl', '/decode/:shortUrl', '/decode/:shortUrl/*'], (request, re
 });
 
 // show input page
-app.use(express.static(__dirname +'./../../')); //serves the index.html
+app.use(express.static(__dirname + './../../')); // serves index.html
 
 app.use(express.json({extended: true}));
-app.use((request, response, next) => {
-    // allow cross domain
-    response.header("Access-Control-Allow-Origin", "*");
-    response.header("Access-Control-Allow-Headers", "Content-Type");
-    next();
-});
+// app.use((request, response, next) => {
+//     // allow cross domain
+//     response.header("Access-Control-Allow-Origin", "*");
+//     response.header("Access-Control-Allow-Headers", "Content-Type");
+//     next();
+// });
 
+/**
+ * Shorten the specified URL
+ */
 app.post('/shorten', function (request, response, next) {
     console.log(request.body.long_url);
     var urlData = request.body.long_url;
 
     let database = new dbSupport();
 
-    database.storeUrl(urlData, function(res) {
+    database.storeUrl(urlData, function (res) {
         response.send({
             url: urlData,
             shortUrl: urlTools.encode(res.shortUrl),
