@@ -52,12 +52,12 @@ app.get(['/:shortUrl', '/decode/:shortUrl', '/decode/:shortUrl/*'], (request, re
 app.use(express.static(__dirname + './../../')); // serves index.html
 
 app.use(express.json({extended: true}));
-// app.use((request, response, next) => {
-//     // allow cross domain
-//     response.header("Access-Control-Allow-Origin", "*");
-//     response.header("Access-Control-Allow-Headers", "Content-Type");
-//     next();
-// });
+app.use((request, response, next) => {
+    // allow cross domain
+    response.header("Access-Control-Allow-Origin", "*");
+    response.header("Access-Control-Allow-Headers", "Content-Type");
+    next();
+});
 
 /**
  * Shorten the specified URL
