@@ -2,7 +2,8 @@ const webpack = require('webpack');
 require('dotenv').load();
 var path = require('path');
 
-const PORT = process.env.nodeServerPort || 3000;
+const NODE_SERVER = process.env.nodeServer || 'localhost:3000';
+const REST_ENDPOINT = process.env.shrinkUrl || '/shorten';
 const BUILD_DIR = path.resolve(__dirname, './build');
 const APP_DIR = path.resolve(__dirname, './src/client');
 
@@ -23,7 +24,7 @@ const config = {
                 loader: 'string-replace-loader',
                 options: {
                     search: '@@SHRINKREST',
-                    replace: 'http://localhost:' + PORT + '/shorten'
+                    replace: NODE_SERVER + REST_ENDPOINT
                 }
             },
             {
